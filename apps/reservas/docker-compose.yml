@@ -1,0 +1,65 @@
+services:
+  reservas-api:
+    build:
+      context: ../../../Motor reservas SOTOdelPRIOR/apps/api
+      dockerfile: Dockerfile
+    container_name: reservas-api
+    restart: unless-stopped
+    networks:
+      - proxy-net
+      - reservas-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+      - ENGINE_URL=http://reservas-engine:3000
+    volumes:
+      - reservas_api_db_data:/app/prisma
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reservas-api.rule=Host(`api.reservas.sotodelprior.com`)"
+      - "traefik.http.routers.reservas-api.entrypoints=websecure"
+      - "traefik.http.routers.reservas-api.tls=true"
+      - "traefik.http.services.reservas-api.loadbalancer.server.port=3000"
+
+  reservas-engine:
+    build:
+      context: ../../../Motor reservas SOTOdelPRIOR/apps/motor-reservas
+      dockerfile: Dockerfile
+    container_name: reservas-engine
+    restart: unless-stopped
+    networks:
+      - reservas-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+    volumes:
+      - reservas_engine_db_data:/app/prisma
+
+  reservas-web:
+    build:
+      context: ../../../Motor reservas SOTOdelPRIOR/apps/web
+      dockerfile: Dockerfile
+    container_name: reservas-web
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.reservas.sotodelprior.com
+      # No Auth Secret needed? Adding just in case if future auth used.
+      - AUTH_SECRET=secret_reservas_build_dummy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.reservas-web.rule=Host(`reservas.sotodelprior.com`)"
+      - "traefik.http.routers.reservas-web.entrypoints=websecure"
+      - "traefik.http.routers.reservas-web.tls=true"
+      - "traefik.http.services.reservas-web.loadbalancer.server.port=3000"
+
+networks:
+  proxy-net:
+    external: true
+  reservas-internal:
+    internal: true
+
+volumes:
+  reservas_api_db_data:
+  reservas_engine_db_data:

@@ -1,0 +1,21 @@
+version: "3.8"
+
+networks:
+  proxy-net:
+    external: true
+
+services:
+  web:
+    image: nginx:alpine
+    container_name: web-soto
+    restart: unless-stopped
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+    networks:
+      - proxy-net
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web-soto.rule=Host(`web.sotodelprior.com`)"
+      - "traefik.http.routers.web-soto.entrypoints=web"

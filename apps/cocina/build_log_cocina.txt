@@ -1,0 +1,231 @@
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.66kB 0.0s done
+#1 DONE 0.0s
+
+#2 [cocina-web internal] load build definition from Dockerfile
+#2 transferring dockerfile: 662B 0.0s done
+#2 DONE 0.0s
+
+#3 [cocina-api internal] load build definition from Dockerfile
+#3 transferring dockerfile: 376B 0.0s done
+#3 DONE 0.0s
+
+#4 [cocina-engine internal] load build definition from Dockerfile
+#4 transferring dockerfile: 371B 0.0s done
+#4 DONE 0.1s
+
+#5 [cocina-engine internal] load metadata for docker.io/library/node:20-alpine
+#5 ...
+
+#6 [auth] library/node:pull token for registry-1.docker.io
+#6 DONE 0.0s
+
+#5 [cocina-engine internal] load metadata for docker.io/library/node:20-alpine
+#5 DONE 1.9s
+
+#7 [cocina-api internal] load .dockerignore
+#7 transferring context: 91B done
+#7 DONE 0.0s
+
+#8 [cocina-engine internal] load .dockerignore
+#8 transferring context: 80B done
+#8 DONE 0.0s
+
+#9 [cocina-web internal] load .dockerignore
+#9 transferring context: 80B done
+#9 DONE 0.0s
+
+#10 [cocina-web 1/7] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#10 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#10 DONE 0.0s
+
+#11 [cocina-engine internal] load build context
+#11 transferring context: 4.45kB 0.0s done
+#11 DONE 0.0s
+
+#12 [cocina-web internal] load build context
+#12 transferring context: 5.79kB 0.0s done
+#12 DONE 0.0s
+
+#13 [cocina-api internal] load build context
+#13 transferring context: 4.45kB 0.0s done
+#13 DONE 0.0s
+
+#14 [cocina-engine 2/7] WORKDIR /app
+#14 CACHED
+
+#15 [cocina-engine 3/7] COPY package.json ./
+#15 CACHED
+
+#16 [cocina-web 3/7] COPY package.json ./
+#16 CACHED
+
+#17 [cocina-web 5/7] COPY . .
+#17 CACHED
+
+#18 [cocina-web 4/7] RUN npm install
+#18 CACHED
+
+#19 [cocina-web 6/7] RUN if [ -d "prisma" ]; then npx prisma generate; fi
+#19 CACHED
+
+#20 [cocina-api 4/7] RUN npm install
+#20 CACHED
+
+#14 [cocina-api 2/7] WORKDIR /app
+#14 CACHED
+
+#21 [cocina-api 5/7] COPY . .
+#21 CACHED
+
+#22 [cocina-api 6/7] RUN npx prisma generate --schema=./prisma/schema.prisma
+#22 CACHED
+
+#23 [cocina-api 3/7] COPY package.json ./
+#23 CACHED
+
+#24 [cocina-api 7/7] RUN npm run build
+#24 CACHED
+
+#25 [cocina-api] exporting to image
+#25 exporting layers
+#25 ...
+
+#26 [cocina-web 7/7] RUN npm run build
+#26 1.074 
+#26 1.074 > app-cocina@0.1.0 build
+#26 1.074 > next build
+#26 1.074 
+#26 3.040 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#26 3.040 This information is used to shape Next.js' roadmap and prioritize features.
+#26 3.040 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#26 3.040 https://nextjs.org/telemetry
+#26 3.040 
+#26 3.056 ▲ Next.js 16.1.0 (Turbopack)
+#26 3.056 - Environments: .env
+#26 3.057 
+#26 3.129 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#26 3.182   Creating an optimized production build ...
+#26 ...
+
+#27 [cocina-engine 4/7] RUN npm install
+#27 ...
+
+#26 [cocina-web 7/7] RUN npm run build
+#26 36.53 
+#26 36.53 > Build error occurred
+#26 36.54 Error: Turbopack build failed with 4 errors:
+#26 36.54 ./.next-internal/server/app/dashboard/inventory/page/actions.js:5:1
+#26 36.54 Export IngredientFormState doesn't exist in target module
+#26 36.54 [0m [90m 3 |[39m [36mexport[39m {createIngredient [36mas[39m [32m'6054428c27f47c99400aa0496bb58c2c86b3472ee3'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54  [90m 4 |[39m [36mexport[39m {updateIngredient [36mas[39m [32m'700bfae338d13fe8188594d868369a3cb22e165892'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54 [31m[1m>[22m[39m[90m 5 |[39m [36mexport[39m {[33mIngredientFormState[39m [36mas[39m [32m'7fada42ee0d07aca5109022bb9573c1e6c13f3411f'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+#26 36.54  [90m 6 |[39m[0m
+#26 36.54 
+#26 36.54 The export IngredientFormState was not found in module [project]/app/lib/actions/inventory.ts [app-rsc] (ecmascript).
+#26 36.54 Did you mean to import createIngredient?
+#26 36.54 All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+#26 36.54 
+#26 36.54 
+#26 36.54 ./app/lib/actions/inventory.ts:7:1
+#26 36.54 Export IngredientFormState doesn't exist in target module
+#26 36.54 [0m [90m  5 |[39m [36mimport[39m { revalidatePath } [36mfrom[39m [32m'next/cache'[39m[33m;[39m
+#26 36.54  [90m  6 |[39m [36mimport[39m { redirect } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+#26 36.54 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { [33mCreateIngredientSchema[39m[33m,[39m [33mUpdateIngredientSchema[39m[33m,[39m [33mIngredientFormState[39m } [36mfrom[39m [32m'@/app/lib/definitions'[39m[33m;[39m
+#26 36.54  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+#26 36.54  [90m  8 |[39m [36mexport[39m type { [33mIngredientFormState[39m }[33m;[39m
+#26 36.54  [90m  9 |[39m
+#26 36.54  [90m 10 |[39m [90m// --- INGREDIENTS ---[39m[0m
+#26 36.54 
+#26 36.54 The export IngredientFormState was not found in module [project]/app/lib/definitions.ts [app-rsc] (ecmascript).
+#26 36.54 Did you mean to import IngredientSchema?
+#26 36.54 All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+#26 36.54 
+#26 36.54 Import trace:
+#26 36.54   Server Component:
+#26 36.54     ./app/lib/actions/inventory.ts
+#26 36.54     ./app/ui/inventory/buttons.tsx
+#26 36.54     ./app/dashboard/inventory/page.tsx
+#26 36.54 
+#26 36.54 
+#26 36.54 ./.next-internal/server/app/dashboard/recipes/page/actions.js:5:1
+#26 36.54 Export RecipeFormState doesn't exist in target module
+#26 36.54 [0m [90m 3 |[39m [36mexport[39m {createRecipe [36mas[39m [32m'609e45adb28350f8997e902daeadb19fea5bb0a315'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54  [90m 4 |[39m [36mexport[39m {updateRecipe [36mas[39m [32m'703681a4b361ed39162c8ad5b3d7eebc09e2e5904e'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54 [31m[1m>[22m[39m[90m 5 |[39m [36mexport[39m {[33mRecipeFormState[39m [36mas[39m [32m'7f8a6fbe8f7fbfb3dbbd035ed89b03f0a66fd9e7eb'[39m} [36mfrom[39m [32m'ACTIONS_MODULE1'[39m
+#26 36.54  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+#26 36.54  [90m 6 |[39m[0m
+#26 36.54 
+#26 36.54 The export RecipeFormState was not found in module [project]/app/lib/actions/recipes.ts [app-rsc] (ecmascript).
+#26 36.54 Did you mean to import updateRecipe?
+#26 36.54 All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+#26 36.54 
+#26 36.54 
+#26 36.54 ./app/lib/actions/recipes.ts:7:1
+#26 36.54 Export RecipeFormState doesn't exist in target module
+#26 36.54 [0m [90m  5 |[39m [36mimport[39m { revalidatePath } [36mfrom[39m [32m'next/cache'[39m[33m;[39m
+#26 36.54  [90m  6 |[39m [36mimport[39m { redirect } [36mfrom[39m [32m'next/navigation'[39m[33m;[39m
+#26 36.54 [31m[1m>[22m[39m[90m  7 |[39m [36mimport[39m { [33mCreateRecipeSchema[39m[33m,[39m [33mUpdateRecipeSchema[39m[33m,[39m [33mRecipeFormState[39m } [36mfrom[39m [32m'@/app/lib/definitions'[39m[33m;[39m
+#26 36.54  [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+#26 36.54  [90m  8 |[39m [36mexport[39m type { [33mRecipeFormState[39m }[33m;[39m
+#26 36.54  [90m  9 |[39m
+#26 36.54  [90m 10 |[39m [90m// --- RECIPES ---[39m[0m
+#26 36.54 
+#26 36.54 The export RecipeFormState was not found in module [project]/app/lib/definitions.ts [app-rsc] (ecmascript).
+#26 36.54 Did you mean to import RecipeSchema?
+#26 36.54 All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+#26 36.54 
+#26 36.54 Import trace:
+#26 36.54   Server Component:
+#26 36.54     ./app/lib/actions/recipes.ts
+#26 36.54     ./app/ui/recipes/buttons.tsx
+#26 36.54     ./app/dashboard/recipes/page.tsx
+#26 36.54 
+#26 36.54 
+#26 36.54     at <unknown> (./.next-internal/server/app/dashboard/inventory/page/actions.js:5:1)
+#26 36.54     at <unknown> (./app/lib/actions/inventory.ts:7:1)
+#26 36.54     at <unknown> (./.next-internal/server/app/dashboard/recipes/page/actions.js:5:1)
+#26 36.54     at <unknown> (./app/lib/actions/recipes.ts:7:1)
+#26 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
+#25 [cocina-api] exporting to image
+#25 ...
+
+#27 [cocina-engine 4/7] RUN npm install
+#27 CANCELED
+
+#25 [cocina-api] exporting to image
+#25 exporting layers 37.0s done
+#25 CANCELED
+------
+ > [cocina-web 7/7] RUN npm run build:
+36.54   Server Component:
+36.54     ./app/lib/actions/recipes.ts
+36.54     ./app/ui/recipes/buttons.tsx
+36.54     ./app/dashboard/recipes/page.tsx
+36.54 
+36.54 
+36.54     at <unknown> (./.next-internal/server/app/dashboard/inventory/page/actions.js:5:1)
+36.54     at <unknown> (./app/lib/actions/inventory.ts:7:1)
+36.54     at <unknown> (./.next-internal/server/app/dashboard/recipes/page/actions.js:5:1)
+36.54     at <unknown> (./app/lib/actions/recipes.ts:7:1)
+------
+Dockerfile:22
+
+--------------------
+
+  20 |     
+
+  21 |     # Build
+
+  22 | >>> RUN npm run build
+
+  23 |     
+
+  24 |     EXPOSE 3000
+
+--------------------
+
+target cocina-web: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+

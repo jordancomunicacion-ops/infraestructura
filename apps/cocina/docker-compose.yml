@@ -1,0 +1,69 @@
+services:
+  cocina-api:
+    build:
+      context: ../../../App cocina SOTOdelPRIOR/apps/api
+      dockerfile: Dockerfile
+    container_name: cocina-api
+    restart: unless-stopped
+    networks:
+      - proxy-net
+      - cocina-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+      - ENGINE_URL=http://cocina-engine:3000
+    volumes:
+      - cocina_api_db_data:/app/prisma
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cocina-api.rule=Host(`api.cocina.sotodelprior.com`)"
+      - "traefik.http.routers.cocina-api.entrypoints=websecure"
+      - "traefik.http.routers.cocina-api.tls=true"
+      - "traefik.http.services.cocina-api.loadbalancer.server.port=3000"
+
+  cocina-engine:
+    build:
+      context: ../../../App cocina SOTOdelPRIOR/apps/cocina-engine
+      dockerfile: Dockerfile
+    container_name: cocina-engine
+    restart: unless-stopped
+    networks:
+      - cocina-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+    volumes:
+      - cocina_engine_db_data:/app/prisma
+
+  cocina-web:
+    build:
+      context: ../../../App cocina SOTOdelPRIOR/apps/web
+      dockerfile: Dockerfile
+    container_name: cocina-web
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - NEXT_PUBLIC_API_URL=https://api.cocina.sotodelprior.com
+      - NEXTAUTH_URL=https://cocina.sotodelprior.com
+      - AUTH_SECRET=secret_cocina_build_dummy
+    volumes:
+      - cocina_web_db_data:/app/prisma
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cocina-web.rule=Host(`cocina.sotodelprior.com`)"
+      - "traefik.http.routers.cocina-web.entrypoints=websecure"
+      - "traefik.http.routers.cocina-web.tls=true"
+      - "traefik.http.services.cocina-web.loadbalancer.server.port=3000"
+
+networks:
+  proxy-net:
+    external: true
+  cocina-internal:
+    internal: true
+
+volumes:
+  cocina_api_db_data:
+  cocina_engine_db_data:
+  cocina_web_db_data:

@@ -1,0 +1,50 @@
+version: "3.8"
+
+networks:
+  proxy-net:
+    external: true
+  app-internal-net:
+    driver: bridge
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ${APP_NAME}-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - app-internal-net
+
+  api:
+    # En cada app real, aquí será tu backend (Node) o build ./api
+    image: nginx:alpine
+    container_name: ${APP_NAME}-api
+    restart: unless-stopped
+    networks:
+      - app-internal-net
+      - proxy-net
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-api.rule=Host(`api.${APP_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-api.entrypoints=web"
+
+  web:
+    # En cada app real, aquí será tu frontend o build ./web
+    image: nginx:alpine
+    container_name: ${APP_NAME}-web
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}-web.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.${APP_NAME}-web.entrypoints=web"

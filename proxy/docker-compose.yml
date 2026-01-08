@@ -1,0 +1,44 @@
+version: "3.8"
+
+networks:
+  proxy-net:
+    external: true
+
+services:
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik_proxy
+    restart: unless-stopped # - no-new-privileges:true
+
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Dashboard local - REMOVED for security
+
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock
+      # - ./acme:/acme
+      - ./config:/config
+
+    command:
+      # Logs
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+      - "--accesslog.format=json"
+
+      # Dashboard
+      - "--api.dashboard=true"
+      - "--api.insecure=true" # - REMOVED for security
+
+      # Entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      # Providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=true"
+      - "--providers.file.directory=/config"
+      - "--providers.file.watch=true"
+
+    networks:
+      - proxy-net

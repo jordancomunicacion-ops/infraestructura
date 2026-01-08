@@ -1,0 +1,49 @@
+version: "3.8"
+
+networks:
+  proxy-net:
+    external: true
+  crm-internal-net:
+    driver: bridge
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: crm-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+    networks:
+      - crm-internal-net
+
+  api:
+    build: ./api
+    container_name: crm-api
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - crm-internal-net
+      - proxy-net
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crm-api.rule=Host(`api.${APP_DOMAIN}`)"
+      - "traefik.http.routers.crm-api.entrypoints=web"
+
+  web:
+    build: ./web
+    container_name: crm-web
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crm-web.rule=Host(`${APP_DOMAIN}`)"
+      - "traefik.http.routers.crm-web.entrypoints=web"

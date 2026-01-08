@@ -1,0 +1,67 @@
+services:
+  crm-api:
+    build:
+      context: ../../../Campañas marketing SOTOdelPRIOR/apps/api
+      dockerfile: Dockerfile
+    container_name: crm-api
+    restart: unless-stopped
+    networks:
+      - proxy-net
+      - crm-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+      - ENGINE_URL=http://crm-engine:3000
+    volumes:
+      - crm_api_db_data:/app/prisma
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crm-api.rule=Host(`api.crm.jordazola.com`)"
+      - "traefik.http.routers.crm-api.entrypoints=websecure"
+      - "traefik.http.routers.crm-api.tls=true"
+      - "traefik.http.services.crm-api.loadbalancer.server.port=3000"
+
+  crm-engine:
+    build:
+      context: ../../../Campañas marketing SOTOdelPRIOR/apps/crm-engine
+      dockerfile: Dockerfile
+    container_name: crm-engine
+    restart: unless-stopped
+    networks:
+      - crm-internal
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - PORT=3000
+    volumes:
+      - crm_engine_db_data:/app/prisma
+
+  crm-web:
+    build:
+      context: ../../../Campañas marketing SOTOdelPRIOR/apps/web
+      dockerfile: Dockerfile
+    container_name: crm-web
+    restart: unless-stopped
+    networks:
+      - proxy-net
+    environment:
+      - DATABASE_URL=file:/app/prisma/dev.db
+      - NEXT_PUBLIC_API_URL=https://api.crm.jordazola.com
+    volumes:
+      - crm_web_db_data:/app/prisma
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.crm-web.rule=Host(`crm.jordazola.com`)"
+      - "traefik.http.routers.crm-web.entrypoints=websecure"
+      - "traefik.http.routers.crm-web.tls=true"
+      - "traefik.http.services.crm-web.loadbalancer.server.port=3000"
+
+networks:
+  proxy-net:
+    external: true
+  crm-internal:
+    internal: true
+
+volumes:
+  crm_api_db_data:
+  crm_engine_db_data:
+  crm_web_db_data:
