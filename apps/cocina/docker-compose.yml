@@ -1,25 +1,34 @@
+version: "3.8"
+
+networks:
+  proxy-net:
+    external: true
+  cocina-internal-net:
+    driver: bridge
+    internal: true
+
+volumes:
+  cocina_db_data:
+
+
 services:
-  cocina-api:
-    build:
-      context: ../../../App cocina SOTOdelPRIOR/apps/api
-      dockerfile: Dockerfile
-    container_name: cocina-api
+  cocina-db:
+    image: postgres:15-alpine
+    container_name: cocina-db
     restart: unless-stopped
-    networks:
-      - proxy-net
-      - cocina-internal
     environment:
-      - DATABASE_URL=file:/app/prisma/dev.db
-      - PORT=3000
-      - ENGINE_URL=http://cocina-engine:3000
+      POSTGRES_DB: ${DB_NAME:-cocina}
+      POSTGRES_USER: ${DB_USER:-cocina_user}
+      POSTGRES_PASSWORD: ${DB_PASS:-cocina_pass}
     volumes:
-      - cocina_api_db_data:/app/prisma
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.cocina-api.rule=Host(`api.cocina.sotodelprior.com`)"
-      - "traefik.http.routers.cocina-api.entrypoints=websecure"
-      - "traefik.http.routers.cocina-api.tls=true"
-      - "traefik.http.services.cocina-api.loadbalancer.server.port=3000"
+      - cocina_db_data:/var/lib/postgresql/data
+    networks:
+      - cocina-internal-net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER:-cocina_user}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   cocina-engine:
     build:
@@ -27,29 +36,60 @@ services:
       dockerfile: Dockerfile
     container_name: cocina-engine
     restart: unless-stopped
-    networks:
-      - cocina-internal
     environment:
-      - DATABASE_URL=file:/app/prisma/dev.db
-      - PORT=3000
-    volumes:
-      - cocina_engine_db_data:/app/prisma
+      DATABASE_URL: postgresql://${DB_USER:-cocina_user}:${DB_PASS:-cocina_pass}@cocina-db:5432/${DB_NAME:-cocina}
+      PORT: 3000
+    networks:
+      - cocina-internal-net
+    depends_on:
+      cocina-db:
+        condition: service_healthy
+    expose:
+      - "3000"
+
+  cocina-api:
+    build:
+      context: ../../../App cocina SOTOdelPRIOR/apps/api
+      dockerfile: Dockerfile
+    container_name: cocina-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-cocina_user}:${DB_PASS:-cocina_pass}@cocina-db:5432/${DB_NAME:-cocina}
+      ENGINE_URL: http://cocina-engine:3000
+      PORT: 3000
+    networks:
+      - cocina-internal-net
+      - proxy-net
+    depends_on:
+      cocina-db:
+        condition: service_healthy
+      cocina-engine:
+        condition: service_started
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cocina-api.rule=Host(`api.cocina.sotodelprior.com`)"
+      - "traefik.http.routers.cocina-api.entrypoints=websecure"
+      - "traefik.http.routers.cocina-api.tls=true"
+      - "traefik.http.services.cocina-api.loadbalancer.server.port=3000"
 
   cocina-web:
     build:
       context: ../../../App cocina SOTOdelPRIOR/apps/web
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: https://api.cocina.sotodelprior.com
     container_name: cocina-web
     restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.cocina.sotodelprior.com
     networks:
       - proxy-net
-    environment:
-      - DATABASE_URL=file:/app/prisma/dev.db
-      - NEXT_PUBLIC_API_URL=https://api.cocina.sotodelprior.com
-      - NEXTAUTH_URL=https://cocina.sotodelprior.com
-      - AUTH_SECRET=secret_cocina_build_dummy
-    volumes:
-      - cocina_web_db_data:/app/prisma
+    depends_on:
+      - cocina-api
+    expose:
+      - "3000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.cocina-web.rule=Host(`cocina.sotodelprior.com`)"
@@ -57,13 +97,9 @@ services:
       - "traefik.http.routers.cocina-web.tls=true"
       - "traefik.http.services.cocina-web.loadbalancer.server.port=3000"
 
-networks:
-  proxy-net:
-    external: true
-  cocina-internal:
-    internal: true
-
-volumes:
-  cocina_api_db_data:
-  cocina_engine_db_data:
-  cocina_web_db_data:
+      # Redirect HTTP -> HTTPS
+      - "traefik.http.routers.cocina-web-http.rule=Host(`cocina.sotodelprior.com`)"
+      - "traefik.http.routers.cocina-web-http.entrypoints=web"
+      - "traefik.http.routers.cocina-web-http.middlewares=cocina-https-redirect"
+      - "traefik.http.middlewares.cocina-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.cocina-https-redirect.redirectscheme.permanent=true"
