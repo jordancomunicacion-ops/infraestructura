@@ -1,0 +1,103 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2026-01-14T11:56:06Z" level=warning msg="/root/SOTOdelPRIOR/Infraestructure/apps/web-soto/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image web-soto-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.18kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 129B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [base 1/1] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#6 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.1s done
+#6 DONE 0.1s
+
+#7 [builder 1/7] WORKDIR /app
+#7 CACHED
+
+#8 [runner  2/10] RUN apk add --no-cache openssl
+#8 CACHED
+
+#9 [runner  3/10] RUN addgroup --system --gid 1001 nodejs
+#9 CACHED
+
+#10 [runner  4/10] RUN adduser --system --uid 1001 nextjs
+#10 CACHED
+
+#5 [internal] load build context
+#5 transferring context: 7.54kB 0.0s done
+#5 DONE 0.0s
+
+#11 [deps 2/4] WORKDIR /app
+#11 CACHED
+
+#12 [deps 4/4] RUN     if [ -f package-lock.json ]; then npm ci;     else echo "Lockfile not found." && exit 1;     fi
+#12 CACHED
+
+#13 [builder 4/7] RUN apk add --no-cache openssl
+#13 CACHED
+
+#14 [builder 3/7] COPY . .
+#14 CACHED
+
+#15 [deps 1/4] RUN apk add --no-cache libc6-compat python3 make g++ openssl
+#15 CACHED
+
+#16 [deps 3/4] COPY package.json package-lock.json* ./
+#16 CACHED
+
+#17 [builder 6/7] RUN rm -f prisma/seed.ts
+#17 CACHED
+
+#18 [builder 5/7] RUN npx prisma generate
+#18 CACHED
+
+#19 [builder 2/7] COPY --from=deps /app/node_modules ./node_modules
+#19 CACHED
+
+#20 [builder 7/7] RUN npm run build
+#20 CACHED
+
+#21 [runner  5/10] COPY --from=builder /app/public ./public
+#21 CACHED
+
+#22 [runner  7/10] RUN chown nextjs:nodejs .next
+#22 CACHED
+
+#23 [runner  6/10] RUN mkdir .next
+#23 CACHED
+
+#24 [runner  8/10] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+#24 ERROR: failed to calculate checksum of ref vejeuippiu8bau2ljitzdme3z::itdg9x90vidw1xq1vhjc5gaxe: "/app/.next/standalone": not found
+------
+ > [runner  8/10] COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./:
+------
+Dockerfile:56
+
+--------------------
+
+  54 |     # Automatically leverage output traces to reduce image size
+
+  55 |     # https://nextjs.org/docs/advanced-features/output-file-tracing
+
+  56 | >>> COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+
+  57 |     COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+  58 |     # Copy Prisma schema for migrations if needed (though client is embedded in standalone usually)
+
+--------------------
+
+failed to solve: failed to compute cache key: failed to calculate checksum of ref vejeuippiu8bau2ljitzdme3z::itdg9x90vidw1xq1vhjc5gaxe: "/app/.next/standalone": not found
+

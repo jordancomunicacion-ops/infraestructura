@@ -87,8 +87,11 @@ services:
       NEXTAUTH_URL: https://cocina.sotodelprior.com
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@cocina-db:5432/${DB_NAME}
+      AUTH_TRUST_HOST: "true"
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
     networks:
       - proxy-net
+      - cocina-internal-net
     depends_on:
       - cocina-api
     expose:
@@ -98,7 +101,11 @@ services:
       - "traefik.http.routers.cocina-web.rule=Host(`cocina.sotodelprior.com`)"
       - "traefik.http.routers.cocina-web.entrypoints=websecure"
       - "traefik.http.routers.cocina-web.tls=true"
-      - "traefik.http.services.cocina-web.loadbalancer.server.port=3000"
+      - "traefik.http.routers.cocina-web.tls.certresolver=le"
+      - "traefik.http.routers.cocina-web.service=cocina-web-svc"
+      - "traefik.http.middlewares.cocina-forwarded.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.cocina-web.middlewares=cocina-forwarded"
+      - "traefik.http.services.cocina-web-svc.loadbalancer.server.port=3000"
 
       # Redirect HTTP -> HTTPS
       - "traefik.http.routers.cocina-web-http.rule=Host(`cocina.sotodelprior.com`)"
@@ -106,3 +113,7 @@ services:
       - "traefik.http.routers.cocina-web-http.middlewares=cocina-https-redirect"
       - "traefik.http.middlewares.cocina-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.cocina-https-redirect.redirectscheme.permanent=true"
+
+    extra_hosts:
+      - "api.cocina.sotodelprior.com:host-gateway"
+      - "cocina.sotodelprior.com:host-gateway"

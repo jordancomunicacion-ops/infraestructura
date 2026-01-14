@@ -1,0 +1,116 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2026-01-14T11:19:46Z" level=warning msg="/root/SOTOdelPRIOR/Infraestructure/apps/web-soto/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image web-soto-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.10kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 129B done
+#4 DONE 0.0s
+
+#5 [base 1/1] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#5 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#5 DONE 0.0s
+
+#6 [builder 1/6] WORKDIR /app
+#6 CACHED
+
+#7 [runner 2/9] RUN addgroup --system --gid 1001 nodejs
+#7 CACHED
+
+#8 [runner 3/9] RUN adduser --system --uid 1001 nextjs
+#8 CACHED
+
+#9 [internal] load build context
+#9 transferring context: 7.54kB 0.0s done
+#9 DONE 0.0s
+
+#10 [deps 4/4] RUN     if [ -f package-lock.json ]; then npm ci;     else echo "Lockfile not found." && exit 1;     fi
+#10 CACHED
+
+#11 [deps 2/4] WORKDIR /app
+#11 CACHED
+
+#12 [builder 2/6] COPY --from=deps /app/node_modules ./node_modules
+#12 CACHED
+
+#13 [builder 3/6] COPY . .
+#13 CACHED
+
+#14 [deps 3/4] COPY package.json package-lock.json* ./
+#14 CACHED
+
+#15 [builder 4/6] RUN npx prisma generate
+#15 CACHED
+
+#16 [deps 1/4] RUN apk add --no-cache libc6-compat python3 make g++
+#16 CACHED
+
+#17 [builder 5/6] RUN rm -f prisma/seed.ts
+#17 CACHED
+
+#18 [builder 6/6] RUN npm run build
+#18 0.603 
+#18 0.603 > servidor-soto-del-prior@0.1.0 build
+#18 0.603 > next build
+#18 0.603 
+#18 2.970 ▲ Next.js 16.1.0 (Turbopack)
+#18 2.972 - Environments: .env
+#18 2.973 
+#18 2.982 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#18 3.069   Creating an optimized production build ...
+#18 41.14 ✓ Compiled successfully in 36.6s
+#18 41.14   Running TypeScript ...
+#18 66.31 Failed to compile.
+#18 66.31 
+#18 66.31 ./src/app/api/checkout/route.ts:6:5
+#18 66.31 Type error: Type '"2024-12-18.acacia"' is not assignable to type '"2025-12-15.clover"'.
+#18 66.31 
+#18 66.31 [0m [90m 4 |[39m [90m// Initialize Stripe with Secret Key[39m
+#18 66.31  [90m 5 |[39m [36mconst[39m stripe [33m=[39m [36mnew[39m [33mStripe[39m(process[33m.[39menv[33m.[39m[33mSTRIPE_SECRET_KEY[39m[33m![39m[33m,[39m {
+#18 66.31 [31m[1m>[22m[39m[90m 6 |[39m     apiVersion[33m:[39m [32m'2024-12-18.acacia'[39m[33m,[39m [90m// Latest API version[39m
+#18 66.31  [90m   |[39m     [31m[1m^[22m[39m
+#18 66.31  [90m 7 |[39m })[33m;[39m
+#18 66.31  [90m 8 |[39m
+#18 66.31  [90m 9 |[39m [36mexport[39m [36masync[39m [36mfunction[39m [33mPOST[39m(request[33m:[39m [33mRequest[39m) {[0m
+#18 66.44 Next.js build worker exited with code: 1 and signal: null
+#18 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+------
+ > [builder 6/6] RUN npm run build:
+66.31 Type error: Type '"2024-12-18.acacia"' is not assignable to type '"2025-12-15.clover"'.
+66.31 
+66.31 [0m [90m 4 |[39m [90m// Initialize Stripe with Secret Key[39m
+66.31  [90m 5 |[39m [36mconst[39m stripe [33m=[39m [36mnew[39m [33mStripe[39m(process[33m.[39menv[33m.[39m[33mSTRIPE_SECRET_KEY[39m[33m![39m[33m,[39m {
+66.31 [31m[1m>[22m[39m[90m 6 |[39m     apiVersion[33m:[39m [32m'2024-12-18.acacia'[39m[33m,[39m [90m// Latest API version[39m
+66.31  [90m   |[39m     [31m[1m^[22m[39m
+66.31  [90m 7 |[39m })[33m;[39m
+66.31  [90m 8 |[39m
+66.31  [90m 9 |[39m [36mexport[39m [36masync[39m [36mfunction[39m [33mPOST[39m(request[33m:[39m [33mRequest[39m) {[0m
+66.44 Next.js build worker exited with code: 1 and signal: null
+------
+Dockerfile:33
+
+--------------------
+
+  31 |     RUN rm -f prisma/seed.ts
+
+  32 |     
+
+  33 | >>> RUN npm run build
+
+  34 |     
+
+  35 |     # Production image, copy all the files and run next
+
+--------------------
+
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+

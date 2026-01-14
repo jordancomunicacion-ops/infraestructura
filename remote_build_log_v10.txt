@@ -1,0 +1,161 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2026-01-14T11:38:19Z" level=warning msg="/root/SOTOdelPRIOR/Infraestructure/apps/web-soto/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image web-soto-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.10kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 129B done
+#4 DONE 0.0s
+
+#5 [base 1/1] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#5 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 7.54kB 0.0s done
+#6 DONE 0.0s
+
+#7 [runner 2/9] RUN addgroup --system --gid 1001 nodejs
+#7 CACHED
+
+#8 [builder 1/6] WORKDIR /app
+#8 CACHED
+
+#9 [runner 3/9] RUN adduser --system --uid 1001 nextjs
+#9 CACHED
+
+#10 [deps 3/4] COPY package.json package-lock.json* ./
+#10 CACHED
+
+#11 [deps 1/4] RUN apk add --no-cache libc6-compat python3 make g++
+#11 CACHED
+
+#12 [deps 2/4] WORKDIR /app
+#12 CACHED
+
+#13 [builder 3/6] COPY . .
+#13 CACHED
+
+#14 [deps 4/4] RUN     if [ -f package-lock.json ]; then npm ci;     else echo "Lockfile not found." && exit 1;     fi
+#14 CACHED
+
+#15 [builder 2/6] COPY --from=deps /app/node_modules ./node_modules
+#15 CACHED
+
+#16 [builder 4/6] RUN npx prisma generate
+#16 CACHED
+
+#17 [builder 5/6] RUN rm -f prisma/seed.ts
+#17 CACHED
+
+#18 [builder 6/6] RUN npm run build
+#18 0.667 
+#18 0.667 > servidor-soto-del-prior@0.1.0 build
+#18 0.667 > next build
+#18 0.667 
+#18 2.817 ▲ Next.js 16.1.0 (Turbopack)
+#18 2.818 - Environments: .env
+#18 2.819 
+#18 2.828 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#18 2.924   Creating an optimized production build ...
+#18 43.99 ✓ Compiled successfully in 39.7s
+#18 43.99   Running TypeScript ...
+#18 69.77   Collecting page data using 1 worker ...
+#18 71.12 prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
+#18 71.12 Please manually install OpenSSL and try installing Prisma again.
+#18 71.13 Error [PrismaClientInitializationError]: Unable to require(`/app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node`).
+#18 71.13 The Prisma engines do not seem to be compatible with your system. Please refer to the documentation about Prisma's system requirements: https://pris.ly/d/system-requirements
+#18 71.13 
+#18 71.13 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+#18 71.13     at ignore-listed frames {
+#18 71.13   clientVersion: '5.22.0',
+#18 71.13   errorCode: undefined
+#18 71.13 }
+#18 71.13 prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
+#18 71.13 Please manually install OpenSSL and try installing Prisma again.
+#18 71.14 Error [PrismaClientInitializationError]: Unable to require(`/app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node`).
+#18 71.14 The Prisma engines do not seem to be compatible with your system. Please refer to the documentation about Prisma's system requirements: https://pris.ly/d/system-requirements
+#18 71.14 
+#18 71.14 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+#18 71.14     at ignore-listed frames {
+#18 71.14   clientVersion: '5.22.0',
+#18 71.14   errorCode: undefined
+#18 71.14 }
+#18 71.14 prisma:warn Prisma failed to detect the libssl/openssl version to use, and may not work as expected. Defaulting to "openssl-1.1.x".
+#18 71.14 Please manually install OpenSSL and try installing Prisma again.
+#18 71.14 Error [PrismaClientInitializationError]: Unable to require(`/app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node`).
+#18 71.14 The Prisma engines do not seem to be compatible with your system. Please refer to the documentation about Prisma's system requirements: https://pris.ly/d/system-requirements
+#18 71.14 
+#18 71.14 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+#18 71.14     at ignore-listed frames {
+#18 71.14   clientVersion: '5.22.0',
+#18 71.14   errorCode: undefined
+#18 71.14 }
+#18 71.20 Error [PrismaClientInitializationError]: Unable to require(`/app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node`).
+#18 71.20 The Prisma engines do not seem to be compatible with your system. Please refer to the documentation about Prisma's system requirements: https://pris.ly/d/system-requirements
+#18 71.20 
+#18 71.20 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+#18 71.20     at ignore-listed frames {
+#18 71.20   clientVersion: '5.22.0',
+#18 71.20   errorCode: undefined
+#18 71.20 }
+#18 71.36   Generating static pages using 1 worker (0/24) ...
+#18 71.45   Generating static pages using 1 worker (6/24) 
+#18 72.33 Error occurred prerendering page "/crm/campaigns". Read more: https://nextjs.org/docs/messages/prerender-error
+#18 72.34 Error [PrismaClientInitializationError]: 
+#18 72.34 Invalid `prisma.campaign.findMany()` invocation:
+#18 72.34 
+#18 72.34 
+#18 72.34 Unable to require(`/app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node`).
+#18 72.34 The Prisma engines do not seem to be compatible with your system. Please refer to the documentation about Prisma's system requirements: https://pris.ly/d/system-requirements
+#18 72.34 
+#18 72.34 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+#18 72.34     at async f (.next/server/chunks/ssr/_99fb56d4._.js:8:42352)
+#18 72.34     at async j (.next/server/chunks/ssr/[root-of-the-server]__e875c604._.js:1:2008) {
+#18 72.34   clientVersion: '5.22.0',
+#18 72.34   errorCode: undefined,
+#18 72.34   digest: '889327104'
+#18 72.34 }
+#18 72.34 Export encountered an error on /crm/campaigns/page: /crm/campaigns, exiting the build.
+#18 72.37 ⨯ Next.js build worker exited with code: 1 and signal: null
+#18 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+------
+ > [builder 6/6] RUN npm run build:
+72.34 
+72.34 Details: Error loading shared library libssl.so.1.1: No such file or directory (needed by /app/node_modules/.prisma/client/libquery_engine-linux-musl.so.node)
+72.34     at async f (.next/server/chunks/ssr/_99fb56d4._.js:8:42352)
+72.34     at async j (.next/server/chunks/ssr/[root-of-the-server]__e875c604._.js:1:2008) {
+72.34   clientVersion: '5.22.0',
+72.34   errorCode: undefined,
+72.34   digest: '889327104'
+72.34 }
+72.34 Export encountered an error on /crm/campaigns/page: /crm/campaigns, exiting the build.
+72.37 ⨯ Next.js build worker exited with code: 1 and signal: null
+------
+Dockerfile:33
+
+--------------------
+
+  31 |     RUN rm -f prisma/seed.ts
+
+  32 |     
+
+  33 | >>> RUN npm run build
+
+  34 |     
+
+  35 |     # Production image, copy all the files and run next
+
+--------------------
+
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+

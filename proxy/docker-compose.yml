@@ -17,7 +17,7 @@ services:
 
     volumes:
       - //var/run/docker.sock:/var/run/docker.sock
-      # - ./acme:/acme
+      - ./letsencrypt:/letsencrypt
       - ./config:/config
 
     command:
@@ -39,6 +39,12 @@ services:
       - "--providers.docker.exposedbydefault=true"
       - "--providers.file.directory=/config"
       - "--providers.file.watch=true"
+
+      # Certificate Resolver (Let's Encrypt)
+      - "--certificatesresolvers.le.acme.email=admin@sotodelprior.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 
     networks:
       - proxy-net

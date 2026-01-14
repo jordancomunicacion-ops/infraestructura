@@ -16,7 +16,7 @@ services:
       - crm_api_db_data:/app/prisma
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.crm-api.rule=Host(`api.crm.jordazola.com`)"
+      - "traefik.http.routers.crm-api.rule=Host(`api.crm.sotodelprior.com`)"
       - "traefik.http.routers.crm-api.entrypoints=websecure"
       - "traefik.http.routers.crm-api.tls=true"
       - "traefik.http.services.crm-api.loadbalancer.server.port=3000"
@@ -45,12 +45,12 @@ services:
       - proxy-net
     environment:
       - DATABASE_URL=file:/app/prisma/dev.db
-      - NEXT_PUBLIC_API_URL=https://api.crm.jordazola.com
+      - NEXT_PUBLIC_API_URL=https://api.crm.sotodelprior.com
     volumes:
       - crm_web_db_data:/app/prisma
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.crm-web.rule=Host(`crm.jordazola.com`)"
+      - "traefik.http.routers.crm-web.rule=Host(`crm.sotodelprior.com`)"
       - "traefik.http.routers.crm-web.entrypoints=websecure"
       - "traefik.http.routers.crm-web.tls=true"
       - "traefik.http.services.crm-web.loadbalancer.server.port=3000"

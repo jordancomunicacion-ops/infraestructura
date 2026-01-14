@@ -1,0 +1,59 @@
+services:
+  # ---------------------------------------------------------
+  # PROXY & WEB SERVER (Nginx)
+  # ---------------------------------------------------------
+  nginx:
+    image: nginx:latest
+    container_name: soto_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./www:/var/www/html:ro
+      # Certbot/SSL certificates would go here (configured later with LetsEncrypt)
+      # - ./certbot/conf:/etc/letsencrypt
+      # - ./certbot/www:/var/www/certbot
+    networks:
+      - soto_net
+    restart: always
+
+  # ---------------------------------------------------------
+  # MAIL SERVER (Docker Mailserver)
+  # ---------------------------------------------------------
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    container_name: soto_mailserver
+    hostname: mail
+    domainname: jordazola.com
+    ports:
+      - "25:25" # SMTP (Inbound/Outbound)
+      - "587:587" # SMTP Submission (Clients)
+      - "143:143" # IMAP (Clients)
+      - "993:993" # IMAPS (Clients)
+    volumes:
+      - ./mail/data:/var/mail-state
+      - ./mail/config:/tmp/docker-mailserver
+    environment:
+      - ENABLE_SPAMASSASSIN=0
+      - ENABLE_CLAMAV=0
+      - ENABLE_FAIL2BAN=1
+      - ENABLE_POSTGREY=0
+      - SSL_TYPE= # Default to self-signed/manual
+      - ONE_DIR=1
+      - DMS_DEBUG=0
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - soto_net
+    restart: always
+  # ---------------------------------------------------------
+  # NEXT.JS APP (SotodelPrior) - Placeholder for integration
+  # ---------------------------------------------------------
+  # This serves as an example. In production, we assume the Next.js app 
+  # is running in another container or locally on port 3000.
+  # If it's a separate container, add it here.
+
+networks:
+  soto_net:
+    driver: bridge

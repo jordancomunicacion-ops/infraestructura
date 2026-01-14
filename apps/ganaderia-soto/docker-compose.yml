@@ -46,6 +46,11 @@ services:
     container_name: ganaderia-web
     restart: unless-stopped
     env_file: .env
+    environment:
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+    extra_hosts:
+      - "api.ganaderia.sotodelprior.com:host-gateway"
+      - "ganaderia.sotodelprior.com:host-gateway"
     depends_on:
       - db
     networks:

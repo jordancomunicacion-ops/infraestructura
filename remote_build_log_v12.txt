@@ -1,0 +1,125 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2026-01-14T11:50:17Z" level=warning msg="/root/SOTOdelPRIOR/Infraestructure/apps/web-soto/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+ Image web-soto-web Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 2.18kB done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:20-alpine
+#3 DONE 0.4s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 129B 0.0s done
+#4 DONE 0.0s
+
+#5 [base 1/1] FROM docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448
+#5 resolve docker.io/library/node:20-alpine@sha256:658d0f63e501824d6c23e06d4bb95c71e7d704537c9d9272f488ac03a370d448 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 7.54kB 0.0s done
+#6 DONE 0.0s
+
+#7 [runner  3/10] RUN addgroup --system --gid 1001 nodejs
+#7 CACHED
+
+#8 [builder 1/7] WORKDIR /app
+#8 CACHED
+
+#9 [runner  2/10] RUN apk add --no-cache openssl
+#9 CACHED
+
+#10 [runner  4/10] RUN adduser --system --uid 1001 nextjs
+#10 CACHED
+
+#11 [builder 3/7] COPY . .
+#11 CACHED
+
+#12 [deps 1/4] RUN apk add --no-cache libc6-compat python3 make g++ openssl
+#12 CACHED
+
+#13 [builder 2/7] COPY --from=deps /app/node_modules ./node_modules
+#13 CACHED
+
+#14 [builder 4/7] RUN apk add --no-cache openssl
+#14 CACHED
+
+#15 [deps 3/4] COPY package.json package-lock.json* ./
+#15 CACHED
+
+#16 [deps 2/4] WORKDIR /app
+#16 CACHED
+
+#17 [builder 5/7] RUN npx prisma generate
+#17 CACHED
+
+#18 [deps 4/4] RUN     if [ -f package-lock.json ]; then npm ci;     else echo "Lockfile not found." && exit 1;     fi
+#18 CACHED
+
+#19 [builder 6/7] RUN rm -f prisma/seed.ts
+#19 CACHED
+
+#20 [builder 7/7] RUN npm run build
+#20 0.661 
+#20 0.661 > servidor-soto-del-prior@0.1.0 build
+#20 0.661 > next build
+#20 0.661 
+#20 2.686 ▲ Next.js 16.1.0 (Turbopack)
+#20 2.688 - Environments: .env
+#20 2.689 
+#20 2.696 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#20 2.785   Creating an optimized production build ...
+#20 43.72 
+#20 43.72 > Build error occurred
+#20 43.73 Error: Turbopack build failed with 1 errors:
+#20 43.73 ./src/app/crm/page.tsx:1:1
+#20 43.73 Module not found: Can't resolve '../../actions/crm'
+#20 43.73 [0m[31m[1m>[22m[39m[90m 1 |[39m [36mimport[39m { getCampaigns[33m,[39m createCampaign } [36mfrom[39m [32m"../../actions/crm"[39m
+#20 43.73  [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+#20 43.73  [90m 2 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m
+#20 43.73  [90m 3 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m
+#20 43.73  [90m 4 |[39m [36mimport[39m {[0m
+#20 43.73 
+#20 43.73 
+#20 43.73 
+#20 43.73 https://nextjs.org/docs/messages/module-not-found
+#20 43.73 
+#20 43.73 
+#20 43.73     at <unknown> (./src/app/crm/page.tsx:1:1)
+#20 43.73     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+#20 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+------
+ > [builder 7/7] RUN npm run build:
+43.73  [90m 3 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m
+43.73  [90m 4 |[39m [36mimport[39m {[0m
+43.73 
+43.73 
+43.73 
+43.73 https://nextjs.org/docs/messages/module-not-found
+43.73 
+43.73 
+43.73     at <unknown> (./src/app/crm/page.tsx:1:1)
+43.73     at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+------
+Dockerfile:34
+
+--------------------
+
+  32 |     RUN rm -f prisma/seed.ts
+
+  33 |     
+
+  34 | >>> RUN npm run build
+
+  35 |     
+
+  36 |     # Production image, copy all the files and run next
+
+--------------------
+
+failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
