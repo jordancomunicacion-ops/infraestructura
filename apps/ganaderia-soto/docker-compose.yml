@@ -37,7 +37,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.ganaderia-api.rule=Host(`api.${APP_DOMAIN}`)"
-      - "traefik.http.routers.ganaderia-api.entrypoints=web"
+      - "traefik.http.routers.ganaderia-api.entrypoints=websecure"
+      - "traefik.http.routers.ganaderia-api.tls=true"
+      - "traefik.http.routers.ganaderia-api.tls.certresolver=le"
       - "traefik.http.routers.ganaderia-api.service=ganaderia-api-svc"
       - "traefik.http.services.ganaderia-api-svc.loadbalancer.server.port=3000"
 
@@ -65,6 +67,7 @@ services:
       - "traefik.http.routers.ganaderia-web.rule=Host(`${APP_DOMAIN}`)"
       - "traefik.http.routers.ganaderia-web.entrypoints=websecure"
       - "traefik.http.routers.ganaderia-web.tls=true"
+      - "traefik.http.routers.ganaderia-web.tls.certresolver=le"
       - "traefik.http.routers.ganaderia-web.service=ganaderia-web-svc"
       - "traefik.http.middlewares.ganaderia-forwarded.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.middlewares.ganaderia-forwarded.headers.customrequestheaders.X-Forwarded-Host=${APP_DOMAIN}"
