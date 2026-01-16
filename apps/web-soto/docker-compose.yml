@@ -12,7 +12,11 @@ services:
     environment:
       - DATABASE_URL=file:/app/db/prod.db
       - NEXT_PUBLIC_APP_URL=https://www.sotodelprior.com
+      - NEXT_PUBLIC_APP_URL=https://www.sotodelprior.com
       - NODE_ENV=production
+      - AUTH_TRUST_HOST=true
+      - NEXTAUTH_URL=https://sotodelprior.com
+      - NEXTAUTH_SECRET=changeme123unused
     volumes:
       - ./db_data:/app/db
     networks:

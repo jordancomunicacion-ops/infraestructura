@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Oswald, Lato } from "next/font/google";
 import "./globals.css";
-import "./web.css"; // Moved from web/layout.tsx
+import "./web_v2.css"; // Moved from web/layout.tsx
 import { CartProvider } from './CartContext'; // Planning to move this file to root
 
 const oswald = Oswald({

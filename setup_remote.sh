@@ -16,43 +16,57 @@ else
 fi
 
 # 0.1. Limpieza de conflictos y espacio en disco (CRITICAL)
-echo "-> Limpiando contenedores y liberando espacio..."
-docker stop traefik || true
-docker rm traefik || true
-docker stop traefik_proxy || true
-docker rm traefik_proxy || true
-# Limpieza agresiva de Docker para recuperar espacio (pero SIN borrar volumenes de datos)
+# ... (Swap logic remains above)
+
+# 0.1. Limpieza TOTAL (Necessario por falta de espacio)
+echo "-> DETENIENDO TODO para liberar espacio (Modo Mantenimiento)..."
+# Detener todos los contenedores corriendo
+if [ "$(docker ps -q)" ]; then
+    docker stop $(docker ps -q)
+fi
+# Borrar todos los contenedores (esto libera las imagenes para ser borradas)
+if [ "$(docker ps -a -q)" ]; then
+    docker rm $(docker ps -a -q)
+fi
+
+# Borrar el archivo comprimido que acabamos de subir para ganar espacio
+rm -f /root/deploy.tar.gz
+
+echo "-> Purgando imagenes antiguas..."
+# Borrar TODAS las imagenes, cache de build y redes no usadas
+# PRECAUCION: Esto obliga a re-descargar imagenes base (postgres, node, traefik), pero es la unica forma de asegurar espacio en 25GB
 docker system prune -a -f
-docker builder prune -f
+docker builder prune -a -f
 
-# ... [Keep intervening lines] ...
+# Asegurar Red (se borro con el prune si no tenia contenedores)
+docker network create proxy-net || true
+echo "-> Red 'proxy-net' verificada."
 
-# 3. Desplegar Apps
+# 1. Desplegar Proxy (Traefik) - CRITICAL
+echo "-> Desplegando Proxy (Traefik)..."
+cd /root/SOTOdelPRIOR/Infraestructure/proxy
+# Asegurar permisos ACME
+mkdir -p acme
+touch acme/acme.json
+chmod 600 acme/acme.json
+docker compose up -d --remove-orphans
+
+# 2. Desplegar Apps
 echo "-> Desplegando Cocina..."
 cd /root/SOTOdelPRIOR/Infraestructure/apps/cocina
-docker compose build
-docker compose up -d
-
-echo "-> Desplegando Ganaderia..."
-cd /root/SOTOdelPRIOR/Infraestructure/apps/ganaderia-soto
-docker compose build
-docker compose up -d
+docker compose up -d --build --remove-orphans
 
 echo "-> Desplegando Reservas..."
 cd /root/SOTOdelPRIOR/Infraestructure/apps/reservas
-docker compose build
-docker compose up -d
+docker compose up -d --build --remove-orphans
 
-echo "-> Desplegando CRM (Paso a paso para evitar crash)..."
-cd /root/SOTOdelPRIOR/Infraestructure/apps/crm
-# Construir uno a uno para no saturar RAM
-docker compose build crm-api
-docker compose build crm-engine
-docker compose build crm-web
-docker compose up -d
+echo "-> Desplegando Ganaderia..."
+cd /root/SOTOdelPRIOR/Infraestructure/apps/ganaderia-soto
+docker compose up -d --build --remove-orphans
 
-echo "-> Desplegando Web..."
+echo "-> Desplegando Web Corporativa..."
 cd /root/SOTOdelPRIOR/Infraestructure/apps/web-soto
-docker compose up -d --build
+docker compose up -d --build --remove-orphans
 
 echo "=== ¡DESPLIEGUE FINALIZADO! ==="
+

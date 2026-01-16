@@ -32,7 +32,7 @@ export default function CartSidebarFinal() {
 
                     <button
                         onClick={toggleCart}
-                        className="absolute right-[28px] top-[16px] text-[#333] hover:text-black transition-colors"
+                        className="absolute right-[28px] top-[16px] text-[#333] hover:text-black transition-colors cursor-pointer z-50 p-2"
                         aria-label="Cerrar"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">

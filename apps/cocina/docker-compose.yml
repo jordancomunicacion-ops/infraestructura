@@ -5,7 +5,6 @@ networks:
     external: true
   cocina-internal-net:
     driver: bridge
-    internal: true
 
 volumes:
   cocina_db_data:
@@ -72,6 +71,7 @@ services:
       - "traefik.http.routers.cocina-api.rule=Host(`api.cocina.sotodelprior.com`)"
       - "traefik.http.routers.cocina-api.entrypoints=websecure"
       - "traefik.http.routers.cocina-api.tls=true"
+      - "traefik.http.routers.cocina-api.tls.certresolver=le"
       - "traefik.http.services.cocina-api.loadbalancer.server.port=3000"
 
   cocina-web:
@@ -83,17 +83,21 @@ services:
     container_name: cocina-web
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: https://api.cocina.sotodelprior.com
-      NEXTAUTH_URL: https://cocina.sotodelprior.com
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASS}@cocina-db:5432/${DB_NAME}
       AUTH_TRUST_HOST: "true"
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
+      # Bypass external loopback for server-side calls
+      API_URL: "http://cocina-api:3000"
+      NEXT_PUBLIC_API_URL: "https://api.cocina.sotodelprior.com"
+      AUTH_URL: "https://cocina.sotodelprior.com"
+      DATABASE_URL: postgresql://${DB_USER:-cocina_user}:${DB_PASS:-cocina_pass}@cocina-db:5432/${DB_NAME:-cocina}
+      AUTH_SECRET: "${AUTH_SECRET:-supersecretkey123}" # Mandatory for NextAuth v5
     networks:
       - proxy-net
       - cocina-internal-net
     depends_on:
       - cocina-api
+    ports:
+      - "3010:3000"
     expose:
       - "3000"
     labels:
@@ -103,8 +107,6 @@ services:
       - "traefik.http.routers.cocina-web.tls=true"
       - "traefik.http.routers.cocina-web.tls.certresolver=le"
       - "traefik.http.routers.cocina-web.service=cocina-web-svc"
-      - "traefik.http.middlewares.cocina-forwarded.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.cocina-web.middlewares=cocina-forwarded"
       - "traefik.http.services.cocina-web-svc.loadbalancer.server.port=3000"
 
       # Redirect HTTP -> HTTPS

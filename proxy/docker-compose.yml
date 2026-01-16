@@ -37,6 +37,7 @@ services:
       # Providers
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=true"
+      - "--providers.docker.network=proxy-net"
       - "--providers.file.directory=/config"
       - "--providers.file.watch=true"
 

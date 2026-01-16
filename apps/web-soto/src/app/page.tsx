@@ -113,6 +113,7 @@ export default async function Home() {
             <div className="product-grid">
               {/* DYNAMIC PRODUCT 1: MENU */}
               <div className="product-card">
+                <img src="/web/assets/menu_degustacion.png" alt="Menú Degustación" />
                 <h3>{menuProduct?.name || "MENÚ DEGUSTACIÓN"}</h3>
                 <p className="product-detail">{menuProduct?.description || "6 Pases"}</p>
                 <p className="product-price">{menuProduct ? menuProduct.price + '€' : "70€"}</p>
@@ -126,6 +127,7 @@ export default async function Home() {
               </div>
               {/* DYNAMIC PRODUCT 2: PACK */}
               <div className="product-card">
+                <img src="/web/assets/pack_artesanal.png" alt="Pack Artesanal" />
                 <h3>{packProduct?.name || "PACK ARTESANAL"}</h3>
                 <p className="product-detail">{packProduct?.description || "Chorizo, salchichón y cecina..."}</p>
                 <p className="product-price">{packProduct ? packProduct.price + '€' : "50€"}</p>
@@ -143,6 +145,7 @@ export default async function Home() {
           <h2 className="big-lead">NO BUSCAMOS LA PERFECCIÓN. <br />BUSCAMOS LA VERDAD.</h2>
           {/* Moved Product Card (Horizontal/Dark) */}
           <div className="product-card product-card--horizontal">
+            <img src="/web/assets/visita_granja.png" alt="Visita Granja" />
             <div className="card-info">
               <h3>{visitProduct?.name || "VISITA A LA GRANJA"}</h3>
               <p className="product-detail">{visitProduct?.description || "Experiencia guiada"}</p>

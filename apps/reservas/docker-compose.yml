@@ -84,6 +84,10 @@ services:
     restart: unless-stopped
     environment:
       NEXT_PUBLIC_API_URL: https://api.reservas.sotodelprior.com
+      AUTH_TRUST_HOST: "true"
+      AUTH_URL: "https://reservas.sotodelprior.com"
+      AUTH_SECRET: "${AUTH_SECRET:-supersecretkeyreservas123}"
+      DATABASE_URL: postgresql://${DB_USER:-reservas_user}:${DB_PASS:-reservas_pass}@reservas-db:5432/${DB_NAME:-reservas}
     networks:
       - proxy-net
     depends_on:
@@ -95,6 +99,7 @@ services:
       - "traefik.http.routers.reservas-web.rule=Host(`reservas.sotodelprior.com`)"
       - "traefik.http.routers.reservas-web.entrypoints=websecure"
       - "traefik.http.routers.reservas-web.tls=true"
+      - "traefik.http.routers.reservas-web.tls.certresolver=le"
       - "traefik.http.services.reservas-web.loadbalancer.server.port=3000"
 
       # Redirect HTTP -> HTTPS
