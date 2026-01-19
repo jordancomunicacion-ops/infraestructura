@@ -22,6 +22,7 @@ services:
     environment:
       DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@crm-db:5432/${DB_NAME}
       PORT: 3000
+      ENGINE_URL: http://crm-engine:3000
     networks:
       - crm-internal-net
       - proxy-net
@@ -42,6 +43,50 @@ services:
       - "traefik.http.services.crm-api.loadbalancer.server.port=3000"
       # Middleware Middlewares (definido globalmente o aquí si es especifico)
       - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+    restart: unless-stopped
+
+  crm-engine:
+    build:
+      context: ../../../Servidor SOTOdelPRIOR
+      dockerfile: apps/ops-engine/Dockerfile
+    container_name: crm-engine
+    depends_on:
+      - crm-db
+    environment:
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASS}@crm-db:5432/${DB_NAME}
+      PORT: 3000
+    networks:
+      - crm-internal-net
+    expose:
+      - "3000"
+    restart: unless-stopped
+
+  crm-web:
+    build:
+      context: ../../../Servidor SOTOdelPRIOR
+      dockerfile: apps/web/Dockerfile
+    container_name: crm-web
+    environment:
+      NEXT_PUBLIC_API_URL: https://api.crm.sotodelprior.com
+      API_INTERNAL_URL: http://crm-api:3000
+    networks:
+      - crm-internal-net
+      - proxy-net
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      # Router HTTP (Redirige a HTTPS)
+      - "traefik.http.routers.crm-web-http.rule=Host(`crm.sotodelprior.com`)"
+      - "traefik.http.routers.crm-web-http.entrypoints=web"
+      - "traefik.http.routers.crm-web-http.middlewares=https-redirect"
+      # Router HTTPS
+      - "traefik.http.routers.crm-web.rule=Host(`crm.sotodelprior.com`)"
+      - "traefik.http.routers.crm-web.entrypoints=websecure"
+      - "traefik.http.routers.crm-web.tls=true"
+      - "traefik.http.routers.crm-web.tls.certresolver=myresolver"
+      # Servicio
+      - "traefik.http.services.crm-web.loadbalancer.server.port=3000"
     restart: unless-stopped
 
 networks:

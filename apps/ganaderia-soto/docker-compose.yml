@@ -21,7 +21,7 @@ services:
       - ganaderia-internal-net
 
   api:
-    build: ../../../App control ganadero SOTOdelPRIOR/apps/api
+    build: ./apps/api
     container_name: ganaderia-api
     restart: unless-stopped
     env_file: .env
@@ -44,7 +44,7 @@ services:
       - "traefik.http.services.ganaderia-api-svc.loadbalancer.server.port=3000"
 
   web:
-    build: ../../../App control ganadero SOTOdelPRIOR/apps/web
+    build: ./apps/web
     container_name: ganaderia-web
     restart: unless-stopped
     env_file: .env
